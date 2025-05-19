@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spotify</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+        <div class="Logo">
+            <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png" height="80px" />
+            <span style="font-size: 24px; font-weight: bold; color: #1db954; margin-left: 10px; vertical-align: middle;">Spotify</span>
+        </div>
+
+        <div class="links">
+            <a href="#" class="link active" id="populares-tab">Populares</a>
+            <a href="#" class="link" id="favoritos-tab">Favoritos</a>
+        </div>
+    </header>
+
+    <main>
+        <h1 id="tab-title">Populares</h1>
+
+        <section class="populares" style="display: flex;">
+            <div class="cartao" data-song="Song A" data-artist="Artist A" data-image="https://i.scdn.co/image/ab67616d0000b2731f1a7a1a2b3c4d5e6f7g8h9i0j">
+                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b2731f1a7a1a2b3c4d5e6f7g8h9i0j" alt="Song A" />
+                <h2>Song A</h2>
+                <h3>Artist A</h3>
+            </div>
+
+            <div class="cartao" data-song="Song B" data-artist="Artist B" data-image="https://i.scdn.co/image/ab67616d0000b2732a2b3c4d5e6f7g8h9i0j1k2l3m4">
+                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b2732a2b3c4d5e6f7g8h9i0j1k2l3m4" alt="Song B" />
+                <h2>Song B</h2>
+                <h3>Artist B</h3>
+            </div>
+
+            <div class="cartao" data-song="Song C" data-artist="Artist C" data-image="https://i.scdn.co/image/ab67616d0000b2733c4d5e6f7g8h9i0j1k2l3m4n5o6">
+                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b2733c4d5e6f7g8h9i0j1k2l3m4n5o6" alt="Song C" />
+                <h2>Song C</h2>
+                <h3>Artist C</h3>
+            </div>
+        </section>
+
+        <section class="favoritos" style="display: none;">
+            <div class="cartao">
+                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b27345634e93b12ef22b433f6fb6" alt="Song 1" />
+                <h2>NÃO PARE</h2>
+                <h3>Teto</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b27363ecdc2fc549275b51fbb9a7" alt="Song 2" />
+                <h2>CastleVania</h2>
+                <h3>Matuê</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
+                <h2>ULTIMA VEZ</h2>
+                <h3>Alee</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
+                <h2>ULTIMA VEZ</h2>
+                <h3>Alee</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
+                <h2>ULTIMA VEZ</h2>
+                <h3>Alee</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
+                <h2>ULTIMA VEZ</h2>
+                <h3>Alee</h3>
+            </div>
+
+            <div class="cartao">
+                <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
+                <h2>ULTIMA VEZ</h2>
+                <h3>Alee</h3>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for song details -->
+    <div id="song-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span id="modal-close" class="close">&times;</span>
+            <img id="modal-image" src="" alt="Song Image" style="width: 100%; border-radius: 8px; margin-bottom: 15px;" />
+            <h2 id="modal-song"></h2>
+            <h3 id="modal-artist"></h3>
+            <p>Simulated song playing...</p>
+        </div>
+    </div>
+
+    <script>
+        const popularesTab = document.getElementById('populares-tab');
+        const favoritosTab = document.getElementById('favoritos-tab');
+        const popularesSection = document.querySelector('section.populares');
+        const favoritosSection = document.querySelector('section.favoritos');
+        const tabTitle = document.getElementById('tab-title');
+
+        popularesTab.addEventListener('click', (e) => {
+            e.preventDefault();
+            popularesTab.classList.add('active');
+            favoritosTab.classList.remove('active');
+            popularesSection.style.display = 'flex';
+            favoritosSection.style.display = 'none';
+            tabTitle.textContent = 'Populares';
+        });
+
+        favoritosTab.addEventListener('click', (e) => {
+            e.preventDefault();
+            favoritosTab.classList.add('active');
+            popularesTab.classList.remove('active');
+            favoritosSection.style.display = 'flex';
+            popularesSection.style.display = 'none';
+            tabTitle.textContent = 'Favoritos';
+        });
+
+        // Modal functionality for Populares cards
+        const modal = document.getElementById('song-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalImage = document.getElementById('modal-image');
+        const modalSong = document.getElementById('modal-song');
+        const modalArtist = document.getElementById('modal-artist');
+
+        document.querySelectorAll('.populares .cartao').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                modalImage.src = card.getAttribute('data-image');
+                modalSong.textContent = card.getAttribute('data-song');
+                modalArtist.textContent = card.getAttribute('data-artist');
+                modal.style.display = 'block';
+            });
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
