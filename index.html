@@ -23,8 +23,8 @@
         <h1 id="tab-title">Populares</h1>
 
         <section class="populares" style="display: flex;">
-            <div class="cartao" data-song="Song A" data-artist="Artist A" data-image="https://i.scdn.co/image/ab67616d0000b2731f1a7a1a2b3c4d5e6f7g8h9i0j">
-                <img height="150px" src="https://i.scdn.co/image/ab67616d0000b2731f1a7a1a2b3c4d5e6f7g8h9i0j" alt="Song A" />
+            <div class="cartao" data-song="NÃO PARE" data-artist="Teto" data-image="https://i.scdn.co/image/ab67616d0000b27345634e93b12ef22b433f6fb6">
+                <img height="150px" src="https://images.genius.com/63d95639ce1227ba5455ae731a2d60c6.1000x1000x1.jpg" alt="NÃO PARE" />
                 <h2>Song A</h2>
                 <h3>Artist A</h3>
             </div>
@@ -43,19 +43,19 @@
         </section>
 
         <section class="favoritos" style="display: none;">
-            <div class="cartao">
+            <div class="cartao" data-song="NÃO PARE" data-artist="Teto" data-image="https://i.scdn.co/image/ab67616d0000b27345634e93b12ef22b433f6fb6">
                 <img height="150px" src="https://i.scdn.co/image/ab67616d0000b27345634e93b12ef22b433f6fb6" alt="Song 1" />
                 <h2>NÃO PARE</h2>
                 <h3>Teto</h3>
             </div>
 
-            <div class="cartao">
+            <div class="cartao" data-song="CastleVania" data-artist="Matuê" data-image="https://i.scdn.co/image/ab67616d0000b27363ecdc2fc549275b51fbb9a7">
                 <img height="150px" src="https://i.scdn.co/image/ab67616d0000b27363ecdc2fc549275b51fbb9a7" alt="Song 2" />
                 <h2>CastleVania</h2>
                 <h3>Matuê</h3>
             </div>
 
-            <div class="cartao">
+            <div class="cartao" data-song="ULTIMA VEZ" data-artist="Alee" data-image="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg">
                 <img height="150px" src="https://cdn-images.dzcdn.net/images/cover/e266a4ed913704ef387f8678f72839a4/1900x1900-000000-80-0-0.jpg" alt="Song 3" />
                 <h2>ULTIMA VEZ</h2>
                 <h3>Alee</h3>
@@ -94,7 +94,29 @@
             <img id="modal-image" src="" alt="Song Image" style="width: 100%; border-radius: 8px; margin-bottom: 15px;" />
             <h2 id="modal-song"></h2>
             <h3 id="modal-artist"></h3>
-            <p>Simulated song playing...</p>
+            <div class="player-controls">
+                <button id="play-pause-btn" aria-label="Play/Pause">&#9658;</button>
+                <input type="range" id="progress-bar" value="0" min="0" max="100" />
+                <span id="current-time">0:00</span> / <span id="duration">3:30</span>
+            </div>
+        </div>
+    </div>
+
+    <button id="device-connect-btn" title="Connect to a device" style="position: fixed; bottom: 20px; right: 20px; background: #1db954; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; color: white; font-size: 24px;">&#128241;</button>
+
+    <!-- Device Connection Modal -->
+    <div id="device-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <span id="device-modal-close" class="close">&times;</span>
+            <h2>Conectar a um dispositivo</h2>
+            <ul>
+                <li><strong>OUVINDO EM</strong><br>Este dispositivo</li>
+                <li>Web Player (Chrome)</li>
+                <li>Mais dispositivos (Airplay e Bluetooth)</li>
+            </ul>
+            <p>Ouça música no seu computador</p>
+            <p>Ouça na sua TV</p>
+            <input type="range" min="0" max="100" value="50" />
         </div>
     </div>
 
@@ -147,6 +169,86 @@
         window.addEventListener('click', (event) => {
             if (event.target === modal) {
                 modal.style.display = 'none';
+            }
+        });
+
+        // Modal functionality for Favoritos cards
+        document.querySelectorAll('.favoritos .cartao').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                modalImage.src = card.getAttribute('data-image');
+                modalSong.textContent = card.getAttribute('data-song');
+                modalArtist.textContent = card.getAttribute('data-artist');
+                modal.style.display = 'block';
+                resetPlayer();
+            });
+        });
+
+        // Play/Pause button functionality
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeSpan = document.getElementById('current-time');
+        const durationSpan = document.getElementById('duration');
+
+        let isPlaying = false;
+        let progressInterval;
+
+        function resetPlayer() {
+            isPlaying = false;
+            playPauseBtn.innerHTML = '&#9658;'; // Play symbol
+            progressBar.value = 0;
+            currentTimeSpan.textContent = '0:00';
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                // Pause
+                isPlaying = false;
+                playPauseBtn.innerHTML = '&#9658;'; // Play symbol
+                clearInterval(progressInterval);
+            } else {
+                // Play
+                isPlaying = true;
+                playPauseBtn.innerHTML = '&#10074;&#10074;'; // Pause symbol
+                let progress = parseInt(progressBar.value);
+                progressInterval = setInterval(() => {
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                        isPlaying = false;
+                        playPauseBtn.innerHTML = '&#9658;';
+                        progressBar.value = 0;
+                        currentTimeSpan.textContent = '0:00';
+                    } else {
+                        progress++;
+                        progressBar.value = progress;
+                        currentTimeSpan.textContent = formatTime((progress / 100) * 210); // 3:30 duration
+                    }
+                }, 1000);
+            }
+        });
+
+        // Device connection modal functionality
+        const deviceConnectBtn = document.getElementById('device-connect-btn');
+        const deviceModal = document.getElementById('device-modal');
+        const deviceModalClose = document.getElementById('device-modal-close');
+
+        deviceConnectBtn.addEventListener('click', () => {
+            deviceModal.style.display = 'block';
+        });
+
+        deviceModalClose.addEventListener('click', () => {
+            deviceModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === deviceModal) {
+                deviceModal.style.display = 'none';
             }
         });
     </script>
